@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>무료 노무 상담 신청 | 노무법인 하이랩 김포지사</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      background: #b2c7d9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .phone-wrap {
+      width: 100%;
+      max-width: 420px;
+      background: #b2c7d9;
+      border-radius: 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+      min-height: 700px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 카카오톡 채널 헤더 */
+    .chat-header {
+      background: #3c1e1e;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+    }
+    .header-back {
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0.8;
+    }
+    .header-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: #fee500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .header-info { flex: 1; }
+    .header-name { font-size: 15px; font-weight: 600; }
+    .header-sub { font-size: 11px; opacity: 0.7; margin-top: 1px; }
+    .header-icons { display: flex; gap: 16px; font-size: 18px; opacity: 0.8; }
+
+    /* 채팅 영역 */
+    .chat-body {
+      flex: 1;
+      background: #b2c7d9;
+      padding: 16px 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 500px;
+    }
+
+    /* 날짜 구분선 */
+    .date-divider {
+      text-align: center;
+      font-size: 11px;
+      color: #666;
+      margin: 4px 0;
+    }
+    .date-divider span {
+      background: rgba(0,0,0,0.12);
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* 봇 메시지 (왼쪽) */
+    .msg-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .msg-row.user { flex-direction: row-reverse; }
+
+    .bot-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #fee500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .msg-content { max-width: 70%; }
+    .msg-name { font-size: 11px; color: #555; margin-bottom: 3px; font-weight: 600; }
+
+    .bubble {
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+    .bubble.bot {
+      background: white;
+      border-top-left-radius: 4px;
+      color: #222;
+    }
+    .bubble.user {
+      background: #fee500;
+      border-top-right-radius: 4px;
+      color: #222;
+      text-align: right;
+    }
+
+    .msg-time {
+      font-size: 10px;
+      color: #888;
+      margin-top: 4px;
+      align-self: flex-end;
+    }
+    .msg-row.user .msg-time { text-align: right; }
+
+    /* 선택지 버튼 */
+    .options-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-top: 4px;
+    }
+    .opt-btn {
+      background: white;
+      border: 1.5px solid #ddd;
+      border-radius: 20px;
+      padding: 9px 18px;
+      font-size: 13px;
+      color: #3a3a3a;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .opt-btn:hover { background: #fff9c4; border-color: #fee500; }
+    .opt-btn.selected { background: #fee500; border-color: #e6c900; font-weight: 600; }
+    .opt-btn:disabled { opacity: 0.5; cursor: default; }
+
+    /* 진행 바 */
+    .progress-bar {
+      background: rgba(0,0,0,0.1);
+      height: 4px;
+      margin: 0 12px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #fee500;
+      transition: width 0.4s ease;
+      border-radius: 2px;
+    }
+
+    /* 결과 카드 */
+    .result-card {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      font-size: 13px;
+      line-height: 1.6;
+      border-top-left-radius: 4px;
+    }
+    .result-card .badge {
+      display: inline-block;
+      background: #fee500;
+      color: #333;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .result-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+    .result-card .point-list {
+      list-style: none;
+      margin: 8px 0;
+    }
+    .result-card .point-list li {
+      padding: 5px 0;
+      display: flex;
+      gap: 6px;
+      font-size: 13px;
+    }
+    .result-card .point-list li::before {
+      content: "•";
+      color: #e6b800;
+      font-weight: 700;
+    }
+    .urgency-bar {
+      margin: 12px 0;
+    }
+    .urgency-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+    .urgency-track {
+      background: #eee;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .urgency-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 1s ease;
+    }
+    .urgency-fill.high { background: #e74c3c; }
+    .urgency-fill.mid  { background: #f39c12; }
+    .urgency-fill.low  { background: #27ae60; }
+
+    /* CTA 버튼 */
+    .cta-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .cta-btn {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border-radius: 12px;
+      border: none;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .cta-btn.primary {
+      background: #fee500;
+      color: #3c1e1e;
+    }
+    .cta-btn.primary:hover { background: #f5dc00; }
+    .cta-btn.secondary {
+      background: #3c1e1e;
+      color: white;
+    }
+    .cta-btn.secondary:hover { background: #4e2828; }
+    .cta-btn.outline {
+      background: white;
+      color: #555;
+      border: 1.5px solid #ddd;
+    }
+    .cta-btn.outline:hover { background: #f9f9f9; }
+
+    /* 텍스트 입력 영역 */
+    .text-input-wrap {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .text-input-wrap textarea {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 20px;
+      border: 1.5px solid #ddd;
+      font-size: 13px;
+      font-family: inherit;
+      resize: none;
+      height: 60px;
+      background: white;
+    }
+    .text-input-wrap textarea:focus { outline: none; border-color: #fee500; }
+    .send-btn {
+      width: 48px;
+      height: 60px;
+      background: #fee500;
+      border: none;
+      border-radius: 20px;
+      font-size: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* 타이핑 인디케이터 */
+    .typing {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .typing-bubble {
+      background: white;
+      border-radius: 16px;
+      border-top-left-radius: 4px;
+      padding: 12px 16px;
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+    .typing-dot {
+      width: 7px;
+      height: 7px;
+      background: #aaa;
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+
+    /* 하단 입력창 */
+    .chat-footer {
+      background: #f0f0f0;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-top: 1px solid #ddd;
+    }
+    .footer-icons { display: flex; gap: 14px; font-size: 20px; color: #888; }
+    .footer-input {
+      flex: 1;
+      background: white;
+      border-radius: 20px;
+      padding: 9px 14px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      color: #aaa;
+    }
+    .footer-send { font-size: 22px; color: #aaa; }
+  </style>
+</head>
+<body>
+
+<div class="phone-wrap">
+
+  <!-- 헤더 -->
+  <div class="chat-header">
+    <span class="header-back" onclick="goBack()" style="cursor:pointer">‹</span>
+    <div class="header-avatar">⚖️</div>
+    <div class="header-info">
+      <div class="header-name">노무 상담 신청</div>
+      <div class="header-sub">노무법인 하이랩 김포지사</div>
+    </div>
+    <div class="header-icons">
+      <span>🔍</span>
+      <span>☰</span>
+    </div>
+  </div>
+
+  <!-- 진행바 -->
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+  </div>
+
+  <!-- 채팅 -->
+  <div class="chat-body" id="chatBody">
+    <div class="date-divider"><span>오늘</span></div>
+  </div>
+
+  <!-- 하단 (비활성) -->
+  <div class="chat-footer">
+    <div class="footer-icons">
+      <span>+</span>
+    </div>
+    <div class="footer-input">버튼을 선택하여 답변해주세요</div>
+    <span class="footer-send">➤</span>
+  </div>
+
+</div>
+
+<script>
+  const chatBody = document.getElementById('chatBody');
+  const progressFill = document.getElementById('progressFill');
+
+  const BOOKING_URL = 'https://map.naver.com/p/entry/place/1207991612?placePath=/ticket?entry=plt&from=map&fromPanelNum=1&additionalHeight=76&timestamp=202603240522&locale=ko&svcName=map_pcv5&searchType=place&lng=126.6240220&lat=37.6438700&c=15.00,0,0,0,dh';
+  const PHONE = '031-8049-3463';
+
+  function nowTime() {
+    const d = new Date();
+    const h = d.getHours();
+    const m = String(d.getMinutes()).padStart(2,'0');
+    const ampm = h < 12 ? '오전' : '오후';
+    return `${ampm} ${h > 12 ? h-12 : h}:${m}`;
+  }
+
+  const answers = {};
+  const stepHistory = [];
+
+  function recordStep(func, answerKeys = []) {
+    const marker = document.createElement('div');
+    marker.className = 'step-marker';
+    marker.style.display = 'none';
+    chatBody.appendChild(marker);
+    stepHistory.push({ marker, func, answerKeys });
+  }
+
+  function goBack() {
+    if (stepHistory.length <= 1) {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;`;
+      overlay.innerHTML = `
+        <div style="background:white;border-radius:16px;padding:24px 20px;max-width:300px;width:90%;text-align:center;font-family:inherit">
+          <div style="font-size:16px;font-weight:700;color:#222;margin-bottom:8px">처음부터 다시 시작할까요?</div>
+          <div style="font-size:13px;color:#888;margin-bottom:20px;line-height:1.6">지금까지 입력한 내용이 모두 초기화됩니다.</div>
+          <div style="display:flex;gap:8px">
+            <button onclick="this.closest('div[style*=fixed]').remove()" style="flex:1;padding:12px;background:white;border:1.5px solid #ddd;border-radius:10px;font-size:14px;color:#555;cursor:pointer;font-family:inherit">취소</button>
+            <button onclick="location.reload()" style="flex:1;padding:12px;background:#fee500;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">처음으로</button>
+          </div>
+        </div>`;
+      document.body.appendChild(overlay);
+      overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+      return;
+    }
+
+    // 1. 현재 스텝 pop → 해당 answerKeys 삭제
+    const current = stepHistory.pop();
+    current.answerKeys.forEach(k => delete answers[k]);
+
+    // 2. 이전 스텝이 새로운 top
+    const prev = stepHistory[stepHistory.length - 1];
+
+    // 3. prev.marker 이후 DOM 전부 제거 (이전 질문 내용 + 현재 질문 내용 모두)
+    while (prev.marker.nextSibling) {
+      chatBody.removeChild(prev.marker.nextSibling);
+    }
+
+    // 4. 이전 스텝의 answerKeys도 삭제 (재질문할 예정)
+    prev.answerKeys.forEach(k => delete answers[k]);
+
+    // 5. 이전 스텝 pop (재호출 시 recordStep이 다시 push하므로)
+    stepHistory.pop();
+
+    // 6. 이전 스텝 함수 재호출
+    prev.func();
+  }
+
+  const totalSteps = 10;
+
+  function updateProgress(step) {
+    progressFill.style.width = `${(step / totalSteps) * 100}%`;
+  }
+
+  function scrollDown() {
+    setTimeout(() => chatBody.scrollTop = chatBody.scrollHeight, 100);
+  }
+
+  function addTyping() {
+    const row = document.createElement('div');
+    row.className = 'typing';
+    row.innerHTML = `
+      <div class="bot-avatar">⚖️</div>
+      <div class="typing-bubble">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>`;
+    chatBody.appendChild(row);
+    scrollDown();
+    return row;
+  }
+
+  function addBotMessage(html, withAvatar = true, delay = 0) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const typing = addTyping();
+        setTimeout(() => {
+          typing.remove();
+          const row = document.createElement('div');
+          row.className = 'msg-row';
+          row.innerHTML = `
+            ${withAvatar ? `<div class="bot-avatar">⚖️</div>` : `<div style="width:36px;flex-shrink:0"></div>`}
+            <div class="msg-content">
+              ${withAvatar ? `<div class="msg-name">하이랩 상담봇</div>` : ''}
+              <div class="bubble bot">${html}</div>
+            </div>
+            <div class="msg-time">${nowTime()}</div>`;
+          chatBody.appendChild(row);
+          scrollDown();
+          resolve(row);
+        }, 900);
+      }, delay);
+    });
+  }
+
+  function addUserMessage(text) {
+    const row = document.createElement('div');
+    row.className = 'msg-row user';
+    row.innerHTML = `
+      <div class="msg-content">
+        <div class="bubble user">${text}</div>
+      </div>
+      <div class="msg-time">${nowTime()}</div>`;
+    chatBody.appendChild(row);
+    scrollDown();
+  }
+
+  function addOptions(options, onSelect) {
+    const wrap = document.createElement('div');
+    wrap.className = 'options-wrap';
+    wrap.style.paddingLeft = '44px';
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.textContent = opt.label;
+      btn.onclick = () => {
+        wrap.querySelectorAll('button').forEach(b => { b.disabled = true; b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        addUserMessage(opt.label);
+        setTimeout(() => wrap.remove(), 300);
+        onSelect(opt);
+      };
+      wrap.appendChild(btn);
+    });
+
+    // 뒤로가기 버튼
+    const backBtn = document.createElement('button');
+    backBtn.textContent = '← 이전 질문으로';
+    backBtn.style.cssText = `
+      background:transparent; border:none; color:#aaa;
+      font-size:12px; padding:6px 4px; cursor:pointer;
+      font-family:inherit; text-align:left; margin-top:2px;
+    `;
+    backBtn.onmouseover = () => backBtn.style.color = '#666';
+    backBtn.onmouseout  = () => backBtn.style.color = '#aaa';
+    backBtn.onclick = () => { wrap.remove(); goBack(); };
+    wrap.appendChild(backBtn);
+
+    chatBody.appendChild(wrap);
+    scrollDown();
+    return wrap;
+  }
+
+  function addTextInput(placeholder, onSubmit) {
+    const wrap = document.createElement('div');
+    wrap.className = 'text-input-wrap';
+    wrap.style.paddingLeft = '44px';
+    const uid = 'ft_' + Date.now();
+    wrap.innerHTML = `
+      <textarea placeholder="${placeholder}" id="${uid}"></textarea>
+      <button class="send-btn" id="sb_${uid}">➤</button>`;
+    chatBody.appendChild(wrap);
+    scrollDown();
+    const ta = wrap.querySelector(`#${uid}`);
+    const btn = wrap.querySelector(`#sb_${uid}`);
+    const submit = () => {
+      const val = ta.value.trim();
+      if (!val) return;
+      ta.disabled = true; btn.disabled = true;
+      addUserMessage(val.replace(/\n/g, '<br>'));
+      setTimeout(() => wrap.remove(), 200);
+      onSubmit(val);
+    };
+    btn.onclick = submit;
+    ta.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } });
+    return wrap;
+  }
+
+  // ==================== 공통 Q1~Q3 ====================
+
+  async function step0_intro() {
+    await addBotMessage(`안녕하세요! 👋<br>노무법인 하이랩 김포지사 <strong>상담 신청 채널</strong>입니다.<br><br>몇 가지 질문에 답해주시면 노무사님이 내용을 검토한 후 직접 연락드립니다.<br><br>⏱ 소요시간: 약 3~5분<br>🔒 마지막 단계에서 개인정보 수집 동의 후 연락처를 입력합니다.`);
+    setTimeout(() => {
+      const wrap = document.createElement('div');
+      wrap.style.paddingLeft = '44px';
+      wrap.innerHTML = `<button class="cta-btn primary" id="startBtn" style="max-width:280px">✅ 상담 신청 시작하기</button>`;
+      chatBody.appendChild(wrap);
+      scrollDown();
+      wrap.querySelector('#startBtn').onclick = () => {
+        wrap.remove();
+        addUserMessage('상담 신청 시작하기');
+        step1();
+      };
+    }, 200);
+  }
+
+  async function step1() {
+    updateProgress(1);
+    recordStep(step1, ['side']);
+    await addBotMessage(`<strong>Q1. 어떤 입장으로 문의하시나요?</strong>`);
+    addOptions([
+      { label: '👤 근로자 (직원)', value: '근로자' },
+      { label: '🏢 사용자 (사업주 / 인사담당자)', value: '사용자' },
+    ], opt => { answers.side = opt.value; step2(); });
+  }
+
+  async function step2() {
+    updateProgress(2);
+    recordStep(step2, ['caseType', 'bizIssue', 'bizLabel']);
+    if (answers.side === '근로자') {
+      await addBotMessage(`<strong>Q2. 어떤 문제로 도움이 필요하신가요?</strong>`);
+      addOptions([
+        { label: '🚫 부당해고 / 권고사직', value: '부당해고' },
+        { label: '💰 임금체불 / 퇴직금', value: '임금체불' },
+        { label: '😰 직장 내 괴롭힘 / 성희롱', value: '직장내괴롭힘' },
+        { label: '📄 근로계약 / 취업규칙 위반', value: '근로계약' },
+        { label: '기타 노동 문제', value: '기타' },
+      ], opt => { answers.caseType = opt.value; step3(); });
+    } else {
+      await addBotMessage(`<strong>Q2. 어떤 이슈로 문의하시나요?</strong>`);
+      addOptions([
+        { label: '⚖️ 직원 해고·징계 처리',       value: '기업자문', bizIssue: '해고처리' },
+        { label: '💴 임금체불 진정·분쟁 대응',     value: '기업자문', bizIssue: '분쟁예방' },
+        { label: '😰 직장 내 괴롭힘 신고 대응',    value: '직장내괴롭힘', bizIssue: '괴롭힘대응' },
+        { label: '📝 근로계약서·취업규칙 정비',    value: '기업자문', bizIssue: '계약서' },
+        { label: '🔍 전반적인 인사노무 점검',       value: '기업자문', bizIssue: '전반점검' },
+      ], opt => {
+        answers.caseType = opt.value;
+        answers.bizIssue = opt.bizIssue;
+        answers.bizLabel = opt.label;
+        step3();
+      });
+    }
+  }
+
+  async function step3() {
+    updateProgress(3);
+    recordStep(step3, ['companySize']);
+    await addBotMessage(`<strong>Q3. 회사 상시 직원 수는 몇 명인가요?</strong><br><small style="color:#888">직원 수에 따라 적용되는 법 조항이 달라집니다</small>`);
+    addOptions([
+      { label: '4인 이하 (5인 미만)', value: '5인미만' },
+      { label: '5~9인', value: '5-9인' },
+      { label: '10~29인', value: '10-29인' },
+      { label: '30~99인', value: '30-99인' },
+      { label: '100인 이상', value: '100인이상' },
+      { label: '잘 모르겠어요', value: '모름' },
+    ], opt => {
+      answers.companySize = opt.value;
+      // 분야별 분기
+      const ct = answers.caseType;
+      if (ct === '부당해고') branch_해고_Q4();
+      else if (ct === '임금체불') branch_임금_Q4();
+      else if (ct === '직장내괴롭힘') branch_괴롭힘_Q4();
+      else if (ct === '기업자문') branch_자문_Q4();
+      else if (ct === '근로계약') branch_근로계약_Q4();
+      else branch_기타_Q4();
+    });
+  }
+
+  // ==================== 부당해고 분기 Q4~Q10 ====================
+  // 판례 근거:
+  // - 근로기준법 23조(정당한 이유), 26조(해고예고), 27조(서면통보)
+  // - 대법원 2015다254228 (절차적 정당성)
+  // - 대법원 2012두12870 (징계절차 위반)
+
+  async function branch_해고_Q4() {
+    updateProgress(4);
+    recordStep(branch_해고_Q4, ['empType']);
+    await addBotMessage(`<strong>Q4. 고용 형태는 무엇인가요?</strong><br><small style="color:#888">계약직·수습은 정규직과 해고 보호 요건이 다릅니다</small>`);
+    addOptions([
+      { label: '정규직 (무기계약)', value: '정규직' },
+      { label: '계약직 (기간제)', value: '계약직' },
+      { label: '수습·시용 기간 중', value: '수습' },
+      { label: '파견·도급', value: '파견' },
+      { label: '잘 모르겠어요', value: '모름' },
+    ], opt => { answers.empType = opt.value; branch_해고_Q5(); });
+  }
+
+  async function branch_해고_Q5() {
+    updateProgress(5);
+    recordStep(branch_해고_Q5, ['tenure']);
+    await addBotMessage(`<strong>Q5. 해당 회사에서 얼마나 근무하셨나요?</strong><br><small style="color:#888">근속 기간에 따라 청구 가능한 항목과 대응 방향이 달라집니다</small>`);
+    addOptions([
+      { label: '3개월 미만', value: '3개월미만' },
+      { label: '3개월~1년 미만', value: '3개월-1년' },
+      { label: '1~3년 미만', value: '1-3년' },
+      { label: '3~5년 미만', value: '3-5년' },
+      { label: '5년 이상', value: '5년이상' },
+    ], opt => { answers.tenure = opt.value; branch_해고_Q6(); });
+  }
+
+  async function branch_해고_Q6() {
+    updateProgress(6);
+    recordStep(branch_해고_Q6, ['dismissalMethod']);
+    await addBotMessage(`<strong>Q6. 해고 통보를 어떻게 받으셨나요?</strong><br><small style="color:#888">해고는 반드시 서면으로 이유를 통보해야 합니다. 구두 통보는 법적으로 효력이 없을 수 있습니다</small>`);
+    addOptions([
+      { label: '📄 서면 (해고통지서)으로 받음', value: '서면' },
+      { label: '💬 구두 (말로만) 통보', value: '구두' },
+      { label: '📱 문자 / 카카오톡 메시지', value: '문자' },
+      { label: '📧 이메일', value: '이메일' },
+      { label: '🤫 통보 없이 출근 배제됨', value: '무통보' },
+    ], opt => { answers.dismissalMethod = opt.value; branch_해고_Q7(); });
+  }
+
+  async function branch_해고_Q7() {
+    updateProgress(7);
+    recordStep(branch_해고_Q7, ['dismissalNotice']);
+    await addBotMessage(`<strong>Q7. 해고 30일 전에 예고를 받으셨나요?</strong><br><small style="color:#888">30일 전 예고 없이 해고됐다면 해고예고수당을 청구할 수 있습니다</small>`);
+    addOptions([
+      { label: '✅ 30일 이상 전에 예고받음', value: '예고있음' },
+      { label: '⚠️ 30일 미만 예고 (예: 2주 전)', value: '예고부족' },
+      { label: '❌ 당일 또는 즉시 해고', value: '즉시해고' },
+      { label: '모르겠어요', value: '모름' },
+    ], opt => { answers.dismissalNotice = opt.value; branch_해고_Q8(); });
+  }
+
+  async function branch_해고_Q8() {
+    updateProgress(8);
+    recordStep(branch_해고_Q8, ['procedure']);
+    await addBotMessage(`<strong>Q8. 해고 전 징계위원회나 소명 기회가 있었나요?</strong><br><small style="color:#888">취업규칙에 징계 절차가 있는데 이를 생략하면 사유가 정당해도 부당해고로 판정될 수 있습니다</small>`);
+    addOptions([
+      { label: '징계위원회 거쳐 해고됨', value: '절차있음' },
+      { label: '소명 기회만 주어짐', value: '소명만' },
+      { label: '아무 절차 없이 해고됨', value: '절차없음' },
+      { label: '잘 모르겠어요', value: '모름' },
+    ], opt => { answers.procedure = opt.value; branch_해고_Q9(); });
+  }
+
+  async function branch_해고_Q9() {
+    updateProgress(9);
+    recordStep(branch_해고_Q9, ['timing']);
+    await addBotMessage(`<strong>Q9. 해고일(또는 마지막 출근일)로부터 얼마나 됐나요?</strong><br><small style="color:#888">⚠️ 부당해고 구제신청은 해고일로부터 <strong>3개월 이내</strong>에 해야 합니다</small>`);
+    addOptions([
+      { label: '🔴 2주 이내', value: '2주이내' },
+      { label: '🟠 1개월 이내', value: '1개월이내' },
+      { label: '🟡 2개월 이내', value: '2개월이내' },
+      { label: '🟠 3개월 이내', value: '3개월이내' },
+      { label: '⚫ 3개월 초과', value: '3개월초과' },
+    ], opt => { answers.timing = opt.value; branch_해고_Q10(); });
+  }
+
+  async function branch_해고_Q10() {
+    updateProgress(10);
+    recordStep(branch_해고_Q10, ['evidence']);
+    await addBotMessage(`<strong>Q10. 보유 중인 자료를 모두 선택해주세요</strong><br><small style="color:#888">증거 유형에 따라 사건 전략이 달라집니다</small>`);
+    addOptions([
+      { label: '📄 해고통지서 / 징계서류', value: '해고통지서' },
+      { label: '📱 문자·카카오톡 (해고 관련)', value: '문자' },
+      { label: '🎙️ 녹음 파일', value: '녹음' },
+      { label: '📋 근로계약서', value: '계약서' },
+      { label: '📊 급여명세서·통장내역', value: '급여서류' },
+      { label: '❌ 없음', value: '없음' },
+    ], opt => { answers.evidence = opt.value; showResult(); });
+  }
+
+  // ==================== 임금체불 분기 Q4~Q10 ====================
+  // 판례 근거:
+  // - 근로기준법 36조(퇴직금 14일), 43조(임금지급)
+  // - 대법원 2016다255910 (포괄임금제 제한)
+  // - 근로자퇴직급여보장법 8조 (1년 이상 퇴직금)
+
+  async function branch_임금_Q4() {
+    updateProgress(4);
+    recordStep(branch_임금_Q4, ['wageType']);
+    await addBotMessage(`<strong>Q4. 체불된 항목은 무엇인가요?</strong><br><small style="color:#888">항목마다 소멸시효와 청구 방법이 다릅니다</small>`);
+    addOptions([
+      { label: '💴 월급 / 주급 미지급', value: '월급체불' },
+      { label: '🏖️ 퇴직금 미지급', value: '퇴직금' },
+      { label: '📅 연차수당 미지급', value: '연차수당' },
+      { label: '🌙 야간·연장·휴일수당', value: '초과근무' },
+      { label: '여러 항목 복합', value: '복합' },
+    ], opt => { answers.wageType = opt.value; branch_임금_Q5(); });
+  }
+
+  async function branch_임금_Q5() {
+    updateProgress(5);
+    recordStep(branch_임금_Q5, ['wageAmount']);
+    await addBotMessage(`<strong>Q5. 체불 금액은 얼마 정도인가요?</strong><br><small style="color:#888">금액 규모에 따라 청구 방법이 달라집니다</small>`);
+    addOptions([
+      { label: '50만 원 미만', value: '50미만' },
+      { label: '50~300만 원', value: '50-300' },
+      { label: '300만~1,000만 원', value: '300-1000' },
+      { label: '1,000만 원 이상', value: '1000이상' },
+      { label: '정확히 모르겠어요', value: '모름' },
+    ], opt => { answers.wageAmount = opt.value; branch_임금_Q6(); });
+  }
+
+  async function branch_임금_Q6() {
+    updateProgress(6);
+    recordStep(branch_임금_Q6, ['tenure']);
+    await addBotMessage(`<strong>Q6. 해당 회사 근속 기간은 얼마인가요?</strong><br><small style="color:#888">퇴직금은 1년 이상 근무하고 주 15시간 이상 일한 경우에 발생합니다</small>`);
+    addOptions([
+      { label: '1년 미만', value: '1년미만' },
+      { label: '1~3년 미만', value: '1-3년' },
+      { label: '3~5년 미만', value: '3-5년' },
+      { label: '5년 이상', value: '5년이상' },
+    ], opt => { answers.tenure = opt.value; branch_임금_Q7(); });
+  }
+
+  async function branch_임금_Q7() {
+    updateProgress(7);
+    recordStep(branch_임금_Q7, ['insurance']);
+    await addBotMessage(`<strong>Q7. 4대보험 가입 여부를 알고 계신가요?</strong><br><small style="color:#888">4대보험 미가입이어도 실제 근무한 사실이 인정되면 임금·퇴직금을 청구할 수 있습니다</small>`);
+    addOptions([
+      { label: '✅ 4대보험 정상 가입', value: '가입' },
+      { label: '❌ 미가입 (현금 지급)', value: '미가입' },
+      { label: '일부만 가입', value: '일부가입' },
+      { label: '모르겠어요', value: '모름' },
+    ], opt => { answers.insurance = opt.value; branch_임금_Q8(); });
+  }
+
+  async function branch_임금_Q8() {
+    updateProgress(8);
+    recordStep(branch_임금_Q8, ['contract']);
+    await addBotMessage(`<strong>Q8. 근로계약서를 작성·교부받으셨나요?</strong><br><small style="color:#888">계약서가 없어도 실제 근무 사실만 입증되면 임금을 청구할 수 있습니다</small>`);
+    addOptions([
+      { label: '📄 작성하고 사본 받음', value: '교부받음' },
+      { label: '작성했지만 사본 없음', value: '사본없음' },
+      { label: '❌ 작성 안 함', value: '미작성' },
+      { label: '구두 약속만 있음', value: '구두' },
+    ], opt => { answers.contract = opt.value; branch_임금_Q9(); });
+  }
+
+  async function branch_임금_Q9() {
+    updateProgress(9);
+    recordStep(branch_임금_Q9, ['timing']);
+    await addBotMessage(`<strong>Q9. 마지막 임금 미지급일(또는 퇴직일)로부터 얼마나 됐나요?</strong><br><small style="color:#888">⚠️ 임금·퇴직금은 마지막 미지급일로부터 3년 안에 청구해야 합니다</small>`);
+    addOptions([
+      { label: '🔴 1개월 이내', value: '1개월이내' },
+      { label: '🟠 3개월 이내', value: '3개월이내' },
+      { label: '🟡 6개월 이내', value: '6개월이내' },
+      { label: '⚪ 1년 이내', value: '1년이내' },
+      { label: '⚫ 1년 초과', value: '1년초과' },
+    ], opt => { answers.timing = opt.value; branch_임금_Q10(); });
+  }
+
+  async function branch_임금_Q10() {
+    updateProgress(10);
+    recordStep(branch_임금_Q10, ['evidence']);
+    await addBotMessage(`<strong>Q10. 보유 중인 자료가 있나요?</strong><br><small style="color:#888">급여명세서가 없어도 계좌이체 내역만으로 입증 가능한 경우가 많습니다</small>`);
+    addOptions([
+      { label: '📊 급여명세서 / 통장이체 내역', value: '급여서류' },
+      { label: '📱 임금 관련 문자·카카오톡', value: '문자' },
+      { label: '📋 근로계약서', value: '계약서' },
+      { label: '🎙️ 녹음 파일', value: '녹음' },
+      { label: '❌ 없음', value: '없음' },
+    ], opt => { answers.evidence = opt.value; showResult(); });
+  }
+
+  // ==================== 직장내괴롭힘 분기 Q4~Q10 ====================
+  // 판례 근거:
+  // - 근로기준법 76조의2 (직장 내 괴롭힘 정의)
+  // - '우월한 지위', '업무상 적정범위 초과', '신체·정신적 고통' 3요건
+  // - 대법원 2020다220588
+
+  async function branch_괴롭힘_Q4() {
+    updateProgress(4);
+    recordStep(branch_괴롭힘_Q4, ['perpetrator']);
+    if (answers.side === '사용자') {
+      await addBotMessage(`<strong>Q4. 신고된 가해자의 직위는 어떻게 되나요?</strong><br><small style="color:#888">가해자와 피해자의 관계에 따라 회사의 조치 의무 범위가 달라집니다</small>`);
+      addOptions([
+        { label: '대표·임원 (사용자 본인 포함)', value: '임원' },
+        { label: '팀장·관리자급', value: '직속상사' },
+        { label: '동료 직원', value: '동료' },
+        { label: '부하 직원', value: '부하' },
+        { label: '잘 모르겠어요', value: '모름' },
+      ], opt => { answers.perpetrator = opt.value; branch_괴롭힘_Q5(); });
+    } else {
+      await addBotMessage(`<strong>Q4. 가해자의 직위는 어떻게 되나요?</strong><br><small style="color:#888">직속 상사뿐 아니라 동료 간 괴롭힘도 인정될 수 있습니다</small>`);
+      addOptions([
+        { label: '직속 상사 (팀장·부장 등)', value: '직속상사' },
+        { label: '임원·대표', value: '임원' },
+        { label: '동료 (같은 직급)', value: '동료' },
+        { label: '부하 직원', value: '부하' },
+        { label: '고객·거래처', value: '외부인' },
+      ], opt => { answers.perpetrator = opt.value; branch_괴롭힘_Q5(); });
+    }
+  }
+
+  async function branch_괴롭힘_Q5() {
+    updateProgress(5);
+    recordStep(branch_괴롭힘_Q5, ['harassType']);
+    if (answers.side === '사용자') {
+      await addBotMessage(`<strong>Q5. 신고된 행위는 어떤 유형인가요?</strong><br><small style="color:#888">행위 유형에 따라 조사 절차 및 회사의 대응 의무 범위가 달라집니다</small>`);
+      addOptions([
+        { label: '🗣️ 언어 폭력·욕설·모욕', value: '언어폭력' },
+        { label: '🚫 업무 배제·따돌림', value: '업무배제' },
+        { label: '💼 과도한 업무 강요', value: '업무강요' },
+        { label: '💔 성희롱·성적 언동', value: '성희롱' },
+        { label: '🤛 신체적 접촉·폭력', value: '신체폭력' },
+        { label: '복합 (여러 유형)', value: '복합' },
+      ], opt => { answers.harassType = opt.value; branch_괴롭힘_Q6(); });
+    } else {
+      await addBotMessage(`<strong>Q5. 주로 어떤 유형의 괴롭힘인가요?</strong><br><small style="color:#888">법원은 행위 유형별로 위법성 판단 기준이 다릅니다</small>`);
+      addOptions([
+        { label: '🗣️ 언어 폭력·욕설·모욕', value: '언어폭력' },
+        { label: '🚫 부당한 업무 배제·왕따', value: '업무배제' },
+        { label: '💼 과도한 업무 강요·야근 강제', value: '업무강요' },
+        { label: '💔 성희롱·성적 수치심', value: '성희롱' },
+        { label: '🤛 신체적 접촉·폭력', value: '신체폭력' },
+        { label: '복합 (여러 유형)', value: '복합' },
+      ], opt => { answers.harassType = opt.value; branch_괴롭힘_Q6(); });
+    }
+  }
+
+  async function branch_괴롭힘_Q6() {
+    updateProgress(6);
+    recordStep(branch_괴롭힘_Q6, ['harassDuration']);
+    await addBotMessage(`<strong>Q6. 괴롭힘이 얼마나 지속됐나요?</strong><br><small style="color:#888">1회 행위도 인정될 수 있지만 반복·지속될수록 입증이 훨씬 유리합니다</small>`);
+    addOptions([
+      { label: '단발성 (1~2회)', value: '단발' },
+      { label: '수 차례 (1개월 이내)', value: '수차례' },
+      { label: '수개월간 지속', value: '수개월' },
+      { label: '1년 이상 반복', value: '1년이상' },
+    ], opt => { answers.harassDuration = opt.value; branch_괴롭힘_Q7(); });
+  }
+
+  async function branch_괴롭힘_Q7() {
+    updateProgress(7);
+    recordStep(branch_괴롭힘_Q7, ['internalReport']);
+    if (answers.side === '사용자') {
+      await addBotMessage(`<strong>Q7. 신고 접수 후 내부적으로 조치를 하셨나요?</strong><br><small style="color:#888">사용자의 조치 의무 이행 여부가 법적 책임에 영향을 줍니다</small>`);
+      addOptions([
+        { label: '✅ 조사 착수 및 조치 완료', value: '신고_조치' },
+        { label: '⚠️ 조사 중 (아직 결론 안 남)', value: '신고_무대응' },
+        { label: '❌ 아직 아무 조치 안 함', value: '미신고' },
+        { label: '신고 자체를 방금 접수함', value: '신고_접수직후' },
+      ], opt => { answers.internalReport = opt.value; branch_괴롭힘_Q8(); });
+    } else {
+      await addBotMessage(`<strong>Q7. 회사 내부에 신고한 적 있나요?</strong><br><small style="color:#888">신고 후 불이익을 받았다면 별도로 추가 청구가 가능합니다</small>`);
+      addOptions([
+        { label: '✅ 신고했고 회사가 조치함', value: '신고_조치' },
+        { label: '⚠️ 신고했지만 묵살·무대응', value: '신고_무대응' },
+        { label: '신고 후 오히려 불이익 받음', value: '신고_불이익' },
+        { label: '❌ 신고 안 함', value: '미신고' },
+      ], opt => { answers.internalReport = opt.value; branch_괴롭힘_Q8(); });
+    }
+  }
+
+  async function branch_괴롭힘_Q8() {
+    updateProgress(8);
+    recordStep(branch_괴롭힘_Q8, ['workStatus']);
+    if (answers.side === '사용자') {
+      await addBotMessage(`<strong>Q8. 현재 어떤 상황인가요?</strong><br><small style="color:#888">상황에 따라 대응 방향이 달라집니다</small>`);
+      addOptions([
+        { label: '직원으로부터 신고·진정을 받은 상태', value: '신고접수' },
+        { label: '노동청 조사가 시작된 상태', value: '조사중' },
+        { label: '내부 신고는 있지만 아직 외부 신고 없음', value: '내부신고' },
+        { label: '분쟁 전 예방 목적으로 확인 중', value: '예방목적' },
+      ], opt => { answers.workStatus = opt.value; branch_괴롭힘_Q9(); });
+    } else {
+      await addBotMessage(`<strong>Q8. 현재 재직 중이신가요?</strong><br><small style="color:#888">재직 중 신고 vs 퇴직 후 신고는 청구 가능 항목과 전략이 달라집니다</small>`);
+      addOptions([
+        { label: '재직 중', value: '재직' },
+        { label: '자진 퇴사 (괴롭힘으로 인해)', value: '자진퇴사' },
+        { label: '해고·권고사직 당함', value: '해고' },
+        { label: '이미 퇴직 (기타 사유)', value: '퇴직' },
+      ], opt => { answers.workStatus = opt.value; branch_괴롭힘_Q9(); });
+    }
+  }
+
+  async function branch_괴롭힘_Q9() {
+    updateProgress(9);
+    recordStep(branch_괴롭힘_Q9, ['witness']);
+    if (answers.side === '사용자') {
+      await addBotMessage(`<strong>Q9. 신고자 외에 추가 피해자나 목격자가 있나요?</strong><br><small style="color:#888">복수 피해자·목격자 여부에 따라 조치 범위와 대응 전략이 달라집니다</small>`);
+      addOptions([
+        { label: '추가 피해자가 있음', value: '동료피해자' },
+        { label: '목격자가 있음', value: '목격자있음' },
+        { label: '신고자 1명만 해당', value: '없음' },
+        { label: '확인되지 않음', value: '모름' },
+      ], opt => { answers.witness = opt.value; branch_괴롭힘_Q10(); });
+    } else {
+      await addBotMessage(`<strong>Q9. 목격자나 동일 피해자가 있나요?</strong><br><small style="color:#888">제3자 진술은 증거력이 높고 사건 해결 가능성을 크게 높입니다</small>`);
+      addOptions([
+        { label: '✅ 목격자 있음', value: '목격자있음' },
+        { label: '같은 피해를 입은 동료 있음', value: '동료피해자' },
+        { label: '❌ 나만 알고 있음', value: '없음' },
+        { label: '잘 모르겠어요', value: '모름' },
+      ], opt => { answers.witness = opt.value; branch_괴롭힘_Q10(); });
+    }
+  }
+
+  async function branch_괴롭힘_Q10() {
+    updateProgress(10);
+    recordStep(branch_괴롭힘_Q10, ['evidence']);
+    if (answers.side === '사용자') {
+      await addBotMessage(`<strong>Q10. 회사 측에서 보유 중인 자료가 있나요?</strong><br><small style="color:#888">조사 과정에서 회사 보유 자료는 객관적 증거로 활용됩니다</small>`);
+      addOptions([
+        { label: '📹 CCTV 영상 보유', value: '영상' },
+        { label: '📧 이메일·사내 메신저 로그', value: '이메일' },
+        { label: '📋 업무 지시서·징계 기록', value: '일지' },
+        { label: '📱 문자·카카오톡 (회사 기기)', value: '문자' },
+        { label: '❌ 특별히 없음', value: '없음' },
+      ], opt => { answers.evidence = opt.value; showResult(); });
+    } else {
+      await addBotMessage(`<strong>Q10. 보유 중인 자료가 있나요?</strong><br><small style="color:#888">본인이 직접 참여한 대화의 녹음은 합법입니다</small>`);
+      addOptions([
+        { label: '🎙️ 녹음 파일', value: '녹음' },
+        { label: '📱 문자·카카오톡 대화', value: '문자' },
+        { label: '📧 이메일·사내 메신저', value: '이메일' },
+        { label: '📷 사진·영상 증거', value: '영상' },
+        { label: '📓 날짜별 기록 (일지)', value: '일지' },
+        { label: '❌ 없음', value: '없음' },
+      ], opt => { answers.evidence = opt.value; showResult(); });
+    }
+  }
+
+  // ==================== 기업자문 분기 Q4~Q10 ====================
+
+  async function branch_자문_Q4() {
+    updateProgress(4);
+    if (answers.side === '사용자' && answers.bizIssue) {
+      // Q2에서 이미 이슈를 선택했으므로 Q4 건너뜀
+      branch_자문_Q5();
+      return;
+    }
+    recordStep(branch_자문_Q4, ['bizIssue']);
+    await addBotMessage(`<strong>Q4. 현재 가장 급한 이슈는 무엇인가요?</strong>`);
+    addOptions([
+      { label: '📝 근로계약서 작성·정비', value: '계약서' },
+      { label: '💰 임금·수당 체계 점검', value: '임금체계' },
+      { label: '📋 취업규칙 작성·신고', value: '취업규칙' },
+      { label: '🚪 직원 해고·퇴직 처리', value: '해고처리' },
+      { label: '⚖️ 노무 분쟁 예방', value: '분쟁예방' },
+      { label: '전반적인 인사노무 점검', value: '전반점검' },
+    ], opt => { answers.bizIssue = opt.value; branch_자문_Q5(); });
+  }
+
+  async function branch_자문_Q5() {
+    updateProgress(5);
+    if (answers.bizIssue === '해고처리') {
+      branch_자문_해고_Q5(); return;
+    }
+    if (answers.bizIssue === '분쟁예방') {
+      branch_자문_분쟁_Q5(); return;
+    }
+    recordStep(branch_자문_Q5, ['contractStatus']);
+    await addBotMessage(`<strong>Q5. 현재 근로계약서를 작성해서 직원에게 교부하고 있나요?</strong><br><small style="color:#888">계약서를 교부하지 않으면 과태료 대상이 됩니다</small>`);
+    addOptions([
+      { label: '✅ 모든 직원 교부 완료', value: '완료' },
+      { label: '일부만 교부함', value: '일부' },
+      { label: '❌ 미교부 (구두 약속)', value: '미교부' },
+      { label: '작성했지만 내용이 불안함', value: '내용불안' },
+    ], opt => { answers.contractStatus = opt.value; branch_자문_Q6(); });
+  }
+
+  // ==================== 해고·징계 처리 전용 Q5~Q9 ====================
+
+  async function branch_자문_해고_Q5() {
+    updateProgress(5);
+    recordStep(branch_자문_해고_Q5, ['dismissalReason']);
+    await addBotMessage(`<strong>Q5. 해고·징계 사유가 무엇인가요?</strong>`);
+    addOptions([
+      { label: '업무 성과 부진·불성실', value: '성과부진' },
+      { label: '결근·무단이탈·지각 반복', value: '결근' },
+      { label: '취업규칙(복무) 위반', value: '복무위반' },
+      { label: '인원 감축 (경영상 해고)', value: '정리해고' },
+      { label: '형사 처벌·비위 행위', value: '비위' },
+    ], opt => { answers.dismissalReason = opt.value; branch_자문_해고_Q6(); });
+  }
+
+  async function branch_자문_해고_Q6() {
+    updateProgress(6);
+    recordStep(branch_자문_해고_Q6, ['disciplineProcess']);
+    await addBotMessage(`<strong>Q6. 사전 경고 또는 징계 절차를 진행했나요?</strong><br><small style="color:#888">절차 흠결은 사유가 정당해도 부당해고 판정의 원인이 됩니다</small>`);
+    addOptions([
+      { label: '📄 서면 경고장 발부·보관 중', value: '서면경고' },
+      { label: '구두 경고만 함', value: '구두경고' },
+      { label: '징계위원회 절차 진행 중', value: '징계위' },
+      { label: '사전 절차 없이 해고 통보함', value: '절차없음' },
+    ], opt => { answers.disciplineProcess = opt.value; branch_자문_해고_Q7(); });
+  }
+
+  async function branch_자문_해고_Q7() {
+    updateProgress(7);
+    recordStep(branch_자문_해고_Q7, ['dismissalNotice']);
+    await addBotMessage(`<strong>Q7. 해고예고 통보를 하셨나요?</strong><br><small style="color:#888">30일 전에 서면으로 예고하거나, 예고 없이 해고할 경우 30일분 수당을 지급해야 합니다</small>`);
+    addOptions([
+      { label: '✅ 30일 전 서면 통보 완료', value: '예고완료' },
+      { label: '예고수당 지급함', value: '수당지급' },
+      { label: '❌ 아직 미통보 (검토 중)', value: '미통보' },
+      { label: '3개월 미만 근무라 해당 없음', value: '해당없음' },
+    ], opt => { answers.dismissalNotice = opt.value; branch_자문_해고_Q8(); });
+  }
+
+  async function branch_자문_해고_Q8() {
+    updateProgress(8);
+    recordStep(branch_자문_해고_Q8, ['tenure']);
+    await addBotMessage(`<strong>Q8. 대상 직원의 근속 기간은 얼마인가요?</strong><br><small style="color:#888">근속 기간에 따라 퇴직금·예고수당 지급 의무가 달라집니다</small>`);
+    addOptions([
+      { label: '3개월 미만', value: '3개월미만' },
+      { label: '3개월 ~ 1년', value: '1년미만' },
+      { label: '1년 ~ 3년', value: '1-3년' },
+      { label: '3년 이상', value: '3년이상' },
+    ], opt => { answers.tenure = opt.value; branch_자문_해고_Q9(); });
+  }
+
+  async function branch_자문_해고_Q9() {
+    updateProgress(9);
+    recordStep(branch_자문_해고_Q9, ['ruleStatus']);
+    await addBotMessage(`<strong>Q9. 취업규칙이나 단체협약에 징계 절차가 규정되어 있나요?</strong><br><small style="color:#888">규정이 있으면 그 절차를 반드시 준수해야 합니다</small>`);
+    addOptions([
+      { label: '✅ 있고 절차에 따라 진행 중', value: '있음_준수' },
+      { label: '있지만 아직 절차 미이행', value: '있음_미이행' },
+      { label: '❌ 없음', value: '없음' },
+      { label: '잘 모르겠어요', value: '모름' },
+    ], opt => { answers.ruleStatus = opt.value; branch_자문_Q10(); });
+  }
+
+  // ==================== 임금체불 분쟁 대응 전용 Q5~Q9 ====================
+
+  async function branch_자문_분쟁_Q5() {
+    updateProgress(5);
+    recordStep(branch_자문_분쟁_Q5, ['disputeItem']);
+    await addBotMessage(`<strong>Q5. 진정이 접수된 항목은 무엇인가요?</strong>`);
+    addOptions([
+      { label: '💴 월급·주급 미지급', value: '월급체불' },
+      { label: '🏖️ 퇴직금 미지급', value: '퇴직금' },
+      { label: '🌙 연장·야간·휴일수당', value: '초과수당' },
+      { label: '📅 연차수당 미지급', value: '연차수당' },
+      { label: '여러 항목 복합', value: '복합' },
+    ], opt => { answers.disputeItem = opt.value; branch_자문_분쟁_Q6(); });
+  }
+
+  async function branch_자문_분쟁_Q6() {
+    updateProgress(6);
+    recordStep(branch_자문_분쟁_Q6, ['disputeTenure']);
+    await addBotMessage(`<strong>Q6. 해당 직원의 근속 기간은 얼마인가요?</strong><br><small style="color:#888">1년 이상 근무 시 퇴직금 지급 의무가 발생합니다</small>`);
+    addOptions([
+      { label: '1년 미만', value: '1년미만' },
+      { label: '1~3년', value: '1-3년' },
+      { label: '3~5년', value: '3-5년' },
+      { label: '5년 이상', value: '5년이상' },
+    ], opt => { answers.disputeTenure = opt.value; branch_자문_분쟁_Q7(); });
+  }
+
+  async function branch_자문_분쟁_Q7() {
+    updateProgress(7);
+    recordStep(branch_자문_분쟁_Q7, ['disputeContract']);
+    await addBotMessage(`<strong>Q7. 해당 직원의 근로계약서가 작성되어 있나요?</strong><br><small style="color:#888">계약서 미작성은 별도 과태료 대상이며, 분쟁 시 불리하게 작용할 수 있습니다</small>`);
+    addOptions([
+      { label: '✅ 작성·교부 완료', value: '완료' },
+      { label: '작성했지만 교부 안 함', value: '미교부' },
+      { label: '❌ 작성 안 함', value: '미작성' },
+      { label: '잘 모르겠어요', value: '모름' },
+    ], opt => { answers.disputeContract = opt.value; branch_자문_분쟁_Q8(); });
+  }
+
+  async function branch_자문_분쟁_Q8() {
+    updateProgress(8);
+    recordStep(branch_자문_분쟁_Q8, ['disputeStage']);
+    await addBotMessage(`<strong>Q8. 현재 노동청 조사 단계는 어디까지 왔나요?</strong>`);
+    addOptions([
+      { label: '진정 접수됐다는 통보만 받음', value: '진정접수' },
+      { label: '출석 요구서를 받음', value: '출석요구' },
+      { label: '조사관 조사 진행 중', value: '조사중' },
+      { label: '아직 공식 통보 없음 (사전 확인 중)', value: '미접수' },
+    ], opt => { answers.disputeStage = opt.value; branch_자문_분쟁_Q9(); });
+  }
+
+  async function branch_자문_분쟁_Q9() {
+    updateProgress(9);
+    recordStep(branch_자문_분쟁_Q9, ['inclusivePay']);
+    await addBotMessage(`<strong>Q9. 포괄임금제(고정 연장수당 포함) 계약을 운영 중인가요?</strong><br><small style="color:#888">포괄임금제 계약이 있어도 법적으로 무효 판정되는 경우가 있습니다</small>`);
+    addOptions([
+      { label: '✅ 포괄임금제 계약 운영 중', value: '운영중' },
+      { label: '❌ 시간 외 수당 별도 지급', value: '별도지급' },
+      { label: '잘 모르겠어요', value: '모름' },
+    ], opt => { answers.inclusivePay = opt.value; branch_자문_Q10(); });
+  }
+
+  async function branch_자문_Q6() {
+    updateProgress(6);
+    recordStep(branch_자문_Q6, ['ruleStatus']);
+    await addBotMessage(`<strong>Q6. 취업규칙이 작성·신고되어 있나요?</strong><br><small style="color:#888">상시 10인 이상 사업장은 취업규칙 작성·신고 의무가 있습니다</small>`);
+    addOptions([
+      { label: '✅ 작성·신고 완료', value: '완료' },
+      { label: '작성은 있지만 신고 안 함', value: '미신고' },
+      { label: '❌ 없음', value: '없음' },
+      { label: '10인 미만이라 해당 없음', value: '해당없음' },
+    ], opt => { answers.ruleStatus = opt.value; branch_자문_Q7(); });
+  }
+
+  async function branch_자문_Q7() {
+    updateProgress(7);
+    recordStep(branch_자문_Q7, ['disputeHistory']);
+    await addBotMessage(`<strong>Q7. 최근 1년 내 노무 관련 분쟁이 발생한 적 있나요?</strong><br><small style="color:#888">유사 분쟁 이력이 있으면 선제 정비가 더욱 중요합니다</small>`);
+    addOptions([
+      { label: '진정·고소 접수된 적 있음', value: '진정이력' },
+      { label: '내부 갈등은 있었지만 신고는 없음', value: '내부갈등' },
+      { label: '없음', value: '없음' },
+    ], opt => { answers.disputeHistory = opt.value; branch_자문_Q8(); });
+  }
+
+  async function branch_자문_Q8() {
+    updateProgress(8);
+    recordStep(branch_자문_Q8, ['specialEmp']);
+    await addBotMessage(`<strong>Q8. 외국인 근로자나 특수고용직(프리랜서) 등 고용하고 계신가요?</strong><br><small style="color:#888">외국인·특고 비율에 따라 점검 항목이 추가됩니다</small>`);
+    addOptions([
+      { label: '외국인 근로자 있음', value: '외국인' },
+      { label: '특수고용직(프리랜서) 있음', value: '특고' },
+      { label: '둘 다 있음', value: '모두' },
+      { label: '해당 없음', value: '없음' },
+    ], opt => { answers.specialEmp = opt.value; branch_자문_Q9(); });
+  }
+
+  async function branch_자문_Q9() {
+    updateProgress(9);
+    recordStep(branch_자문_Q9, ['inclusivePay']);
+    await addBotMessage(`<strong>Q9. 포괄임금제(고정 연장수당 포함) 계약을 운영 중인가요?</strong><br><small style="color:#888">포괄임금제 계약이 있어도 법적으로 무효 판정되는 경우가 있습니다</small>`);
+    addOptions([
+      { label: '✅ 포괄임금제 계약 운영 중', value: '운영중' },
+      { label: '❌ 시간 외 수당 별도 지급', value: '별도지급' },
+      { label: '잘 모르겠어요', value: '모름' },
+    ], opt => { answers.inclusivePay = opt.value; branch_자문_Q10(); });
+  }
+
+  async function branch_자문_Q10() {
+    updateProgress(10);
+    recordStep(branch_자문_Q10, ['laborInspection']);
+    await addBotMessage(`<strong>Q10. 최근 3년 내 노동청 근로감독을 받은 적 있나요?</strong><br><small style="color:#888">감독 이력이 있으면 동일 항목 재적발 시 제재가 가중됩니다</small>`);
+    addOptions([
+      { label: '✅ 받은 적 있음 (시정 완료)', value: '수검_시정' },
+      { label: '받은 적 있음 (조치 미완)', value: '수검_미완' },
+      { label: '❌ 받은 적 없음', value: '없음' },
+      { label: '잘 모르겠어요', value: '모름' },
+    ], opt => { answers.laborInspection = opt.value; showResult(); });
+  }
+
+  // ==================== 근로계약·취업규칙 분기 Q4 ====================
+
+  async function branch_근로계약_Q4() {
+    updateProgress(4);
+    recordStep(branch_근로계약_Q4, ['subType']);
+    await addBotMessage(`<strong>Q4. 어떤 문제인가요?</strong>`);
+    addOptions([
+      { label: '계약서와 다른 조건으로 근무 중', value: '계약조건위반' },
+      { label: '연차·휴가 사용 불가', value: '연차휴가' },
+      { label: '근로조건 일방적 변경 (급여 삭감·업무 변경)', value: '근로조건변경' },
+      { label: '계약직 정규직 전환 미이행', value: '전환미이행' },
+      { label: '초과근무 강제', value: '초과근무강제' },
+      { label: '기타', value: '기타' },
+    ], opt => { answers.subType = opt.value; branch_기타_Q5(); });
+  }
+
+  // ==================== 기타 분기 Q4~Q10 ====================
+
+  async function branch_기타_Q4() {
+    updateProgress(4);
+    recordStep(branch_기타_Q4, ['subType']);
+    await addBotMessage(`<strong>Q4. 좀 더 구체적으로 어떤 문제인가요?</strong>`);
+    addOptions([
+      { label: '산재·업무상 재해', value: '산재' },
+      { label: '육아휴직·출산휴가 문제', value: '육아휴직' },
+      { label: '부당전보·강등', value: '부당전보' },
+      { label: '경업금지·전직금지 위반', value: '경업금지' },
+      { label: '기타', value: '기타' },
+    ], opt => { answers.subType = opt.value; branch_기타_Q5(); });
+  }
+
+  async function branch_기타_Q5() {
+    updateProgress(5);
+    recordStep(branch_기타_Q5, ['empType']);
+    await addBotMessage(`<strong>Q5. 고용 형태는 무엇인가요?</strong>`);
+    addOptions([
+      { label: '정규직', value: '정규직' },
+      { label: '계약직 (기간제)', value: '계약직' },
+      { label: '파견·도급', value: '파견' },
+      { label: '특수고용직(프리랜서)', value: '특고' },
+    ], opt => { answers.empType = opt.value; branch_기타_Q6(); });
+  }
+
+  async function branch_기타_Q6() {
+    updateProgress(6);
+    recordStep(branch_기타_Q6, ['tenure']);
+    await addBotMessage(`<strong>Q6. 해당 회사 근속 기간은 얼마인가요?</strong>`);
+    addOptions([
+      { label: '1년 미만', value: '1년미만' },
+      { label: '1~3년', value: '1-3년' },
+      { label: '3~5년', value: '3-5년' },
+      { label: '5년 이상', value: '5년이상' },
+    ], opt => { answers.tenure = opt.value; branch_기타_Q7(); });
+  }
+
+  async function branch_기타_Q7() {
+    updateProgress(7);
+    recordStep(branch_기타_Q7, ['timing']);
+    await addBotMessage(`<strong>Q7. 문제가 언제 발생했나요?</strong>`);
+    addOptions([
+      { label: '🔴 1개월 이내', value: '1개월이내' },
+      { label: '🟠 3개월 이내', value: '3개월이내' },
+      { label: '🟡 6개월 이내', value: '6개월이내' },
+      { label: '⚪ 1년 이내', value: '1년이내' },
+      { label: '⚫ 1년 초과', value: '1년초과' },
+    ], opt => { answers.timing = opt.value; branch_기타_Q8(); });
+  }
+
+  async function branch_기타_Q8() {
+    updateProgress(8);
+    recordStep(branch_기타_Q8, ['negotiation']);
+    if (answers.caseType === '근로계약') {
+      await addBotMessage(`<strong>Q8. 회사에 시정 요구를 한 적 있나요?</strong>`);
+      addOptions([
+        { label: '요구했고 시정됨', value: '합의중' },
+        { label: '요구했지만 거절당함', value: '거절' },
+        { label: '아직 요구하지 않음', value: '미시도' },
+      ], opt => { answers.negotiation = opt.value; branch_기타_Q9(); });
+    } else {
+      await addBotMessage(`<strong>Q8. 회사 측과 이미 대화를 시도하셨나요?</strong>`);
+      addOptions([
+        { label: '대화 시도했고 합의 진행 중', value: '합의중' },
+        { label: '대화했지만 거절당함', value: '거절' },
+        { label: '아직 대화 없음', value: '미시도' },
+      ], opt => { answers.negotiation = opt.value; branch_기타_Q9(); });
+    }
+  }
+
+  async function branch_기타_Q9() {
+    updateProgress(9);
+    recordStep(branch_기타_Q9, ['evidence']);
+    await addBotMessage(`<strong>Q9. 관련 자료가 있나요?</strong>`);
+    addOptions([
+      { label: '📱 문자·카카오톡', value: '문자' },
+      { label: '📋 계약서·내부 문서', value: '서류' },
+      { label: '🎙️ 녹음', value: '녹음' },
+      { label: '❌ 없음', value: '없음' },
+    ], opt => { answers.evidence = opt.value; branch_기타_Q10(); });
+  }
+
+  async function branch_기타_Q10() {
+    updateProgress(10);
+    recordStep(branch_기타_Q10, ['desiredOutcome']);
+    await addBotMessage(`<strong>Q10. 현재 가장 원하시는 결과는 무엇인가요?</strong>`);
+    if (answers.caseType === '근로계약') {
+      addOptions([
+        { label: '미지급 수당 청구 (연차수당 등)', value: '수당청구' },
+        { label: '근로조건 원상 복구', value: '원상복구' },
+        { label: '법적 처벌 (고소·고발)', value: '처벌' },
+        { label: '일단 대응 방향 파악', value: '방향파악' },
+      ], opt => { answers.desiredOutcome = opt.value; showResult(); });
+    } else if (answers.subType === '부당전보') {
+      addOptions([
+        { label: '원직 복직', value: '복직' },
+        { label: '금전적 보상·합의', value: '금전' },
+        { label: '법적 처벌 (고소·고발)', value: '처벌' },
+        { label: '일단 대응 방향 파악', value: '방향파악' },
+      ], opt => { answers.desiredOutcome = opt.value; showResult(); });
+    } else {
+      addOptions([
+        { label: '금전적 보상·합의', value: '금전' },
+        { label: '근로조건 시정·원상 복구', value: '원상복구' },
+        { label: '법적 처벌 (고소·고발)', value: '처벌' },
+        { label: '일단 대응 방향 파악', value: '방향파악' },
+      ], opt => { answers.desiredOutcome = opt.value; showResult(); });
+    }
+  }
+
+  // ==================== 결과 화면 ====================
+
+  async function showResult() {
+    await addBotMessage('답변 내용을 정리하고 있습니다... ✍️');
+    await new Promise(r => setTimeout(r, 1200));
+
+    const caseLabels = {
+      '부당해고':     '부당해고 / 해고 관련',
+      '임금체불':     '임금체불 / 퇴직금',
+      '직장내괴롭힘': '직장 내 괴롭힘',
+      '근로계약':     '근로계약 / 취업규칙',
+      '기업자문':     '인사노무 자문',
+      '기타':         '기타 노동 문제',
+    };
+    const caseLabel = caseLabels[answers.caseType] || '노동 관련 문의';
+
+    // 접수 요약 카드
+    const summaryHtml = `
+      <div class="badge">📋 상담 신청 내용 요약</div>
+      <h3 style="margin-bottom:14px">${caseLabel}</h3>
+      <div style="font-size:13px;color:#555;line-height:1.9">
+        <div>• 입장: <strong>${answers.side === '근로자' ? '근로자 (직원)' : '사용자 (사업주)'}</strong></div>
+        <div>• 사업장 규모: <strong>${answers.companySize}</strong></div>
+        ${answers.timing ? `<div>• 발생 시점: <strong>${answers.timing}</strong></div>` : ''}
+        ${answers.evidence ? `<div>• 보유 자료: <strong>${answers.evidence}</strong></div>` : ''}
+      </div>
+      <div style="margin-top:14px;padding:12px;background:#f4f6f9;border-radius:8px;font-size:12px;color:#888;line-height:1.7">
+        ※ 위 내용은 상담 신청을 위한 기초 정보 수집입니다.<br>
+        구체적인 법적 판단은 노무사님이 직접 검토 후 안내드립니다.
+      </div>`;
+
+    const resultRow = document.createElement('div');
+    resultRow.className = 'msg-row';
+    resultRow.innerHTML = `
+      <div class="bot-avatar">⚖️</div>
+      <div class="msg-content">
+        <div class="msg-name">하이랩 상담봇</div>
+        <div class="result-card">${summaryHtml}</div>
+      </div>
+      <div class="msg-time">${nowTime()}</div>`;
+    chatBody.appendChild(resultRow);
+    scrollDown();
+
+    setTimeout(async () => {
+      await addBotMessage('내용 확인했습니다.<br>노무사님이 직접 검토 후 연락드리겠습니다.', true, 200);
+      if (answers.side === '사용자') {
+        setTimeout(() => showServiceTypeQuestion(), 600);
+      } else {
+        setTimeout(() => showPrivacyConsent(), 600);
+      }
+    }, 400);
+  }
+
+  function showServiceTypeQuestion() {
+    const wrap = document.createElement('div');
+    wrap.style.paddingLeft = '44px';
+    wrap.innerHTML = `
+      <div style="background:white;border-radius:16px;border-top-left-radius:4px;padding:16px;font-size:14px">
+        <div style="font-weight:700;margin-bottom:12px;color:#222">어떤 형태의 도움을 원하시나요?</div>
+        <div style="display:flex;flex-direction:column;gap:8px" id="serviceTypeGroup">
+          <button class="svc-btn" data-val="1회상담"
+            style="padding:11px 14px;border:1.5px solid #ddd;border-radius:10px;background:white;font-size:14px;cursor:pointer;font-family:inherit;text-align:left">
+            💬 일단 상황 파악을 위한 1회 상담
+          </button>
+          <button class="svc-btn" data-val="전체의뢰"
+            style="padding:11px 14px;border:1.5px solid #ddd;border-radius:10px;background:white;font-size:14px;cursor:pointer;font-family:inherit;text-align:left">
+            ⚖️ 이번 사건 전체 대응을 맡기고 싶음
+          </button>
+          <button class="svc-btn" data-val="정기자문"
+            style="padding:11px 14px;border:1.5px solid #ddd;border-radius:10px;background:white;font-size:14px;cursor:pointer;font-family:inherit;text-align:left">
+            📋 정기 자문 계약 검토 중
+          </button>
+          <button class="svc-btn" data-val="미정"
+            style="padding:11px 14px;border:1.5px solid #ddd;border-radius:10px;background:white;font-size:14px;cursor:pointer;font-family:inherit;text-align:left">
+            🤔 아직 모르겠음
+          </button>
+        </div>
+      </div>`;
+    chatBody.appendChild(wrap);
+    scrollDown();
+
+    wrap.querySelectorAll('.svc-btn').forEach(btn => {
+      btn.onclick = () => {
+        answers.serviceType = btn.dataset.val;
+        wrap.querySelectorAll('.svc-btn').forEach(b => {
+          b.style.background = 'white'; b.style.borderColor = '#ddd'; b.style.fontWeight = 'normal';
+        });
+        btn.style.background = '#fff9c4'; btn.style.borderColor = '#e6c900'; btn.style.fontWeight = '700';
+        addUserMessage(btn.textContent.trim());
+        setTimeout(() => { wrap.remove(); showPrivacyConsent(); }, 300);
+      };
+    });
+  }
+
+  function showPrivacyConsent() {
+    addBotMessage('연락처 정보를 입력하시기 전에<br>개인정보 수집·이용에 동의해 주세요.', true, 0);
+    setTimeout(() => {
+      const wrap = document.createElement('div');
+      wrap.style.paddingLeft = '44px';
+      wrap.innerHTML = `
+        <div style="background:white;border-radius:16px;border-top-left-radius:4px;padding:18px;font-size:13px;line-height:1.8">
+          <div style="font-weight:700;font-size:14px;margin-bottom:12px;color:#222">📋 개인정보 수집·이용 동의</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:14px">
+            <thead>
+              <tr style="background:#f4f6f9">
+                <th style="padding:8px 10px;text-align:left;font-weight:600;color:#555;border:1px solid #e5e7eb">항목</th>
+                <th style="padding:8px 10px;text-align:left;font-weight:600;color:#555;border:1px solid #e5e7eb">내용</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:8px 10px;border:1px solid #e5e7eb;color:#444">수집 주체</td>
+                <td style="padding:8px 10px;border:1px solid #e5e7eb;color:#444">노무법인 하이랩 김포지사</td>
+              </tr>
+              <tr style="background:#fafafa">
+                <td style="padding:8px 10px;border:1px solid #e5e7eb;color:#444">수집 항목</td>
+                <td style="padding:8px 10px;border:1px solid #e5e7eb;color:#444">이름, 연락처, 연락 가능 시간</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 10px;border:1px solid #e5e7eb;color:#444">수집 목적</td>
+                <td style="padding:8px 10px;border:1px solid #e5e7eb;color:#444">상담 연락 및 일정 안내</td>
+              </tr>
+              <tr style="background:#fafafa">
+                <td style="padding:8px 10px;border:1px solid #e5e7eb;color:#444">보유 기간</td>
+                <td style="padding:8px 10px;border:1px solid #e5e7eb;color:#444">상담 완료 후 6개월, 미연락 시 즉시 파기</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 10px;border:1px solid #e5e7eb;color:#444">거부 권리</td>
+                <td style="padding:8px 10px;border:1px solid #e5e7eb;color:#444">동의 거부 가능 (단, 상담 신청 불가)</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="font-size:11px;color:#999;margin-bottom:14px">
+            수집된 정보는 상담 목적 외 제3자에게 제공되지 않습니다.<br>
+            개인정보 처리에 관한 문의: 031-8049-3463
+          </div>
+          <div style="display:flex;gap:8px">
+            <button onclick="onPrivacyAgree(this)"
+              style="flex:1;padding:12px;background:#fee500;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">
+              ✅ 동의하고 계속하기
+            </button>
+            <button onclick="onPrivacyDecline(this)"
+              style="flex:1;padding:12px;background:white;border:1.5px solid #ddd;border-radius:10px;font-size:14px;color:#888;cursor:pointer;font-family:inherit">
+              거부
+            </button>
+          </div>
+        </div>`;
+      chatBody.appendChild(wrap);
+      scrollDown();
+    }, 800);
+  }
+
+  function onPrivacyAgree(btn) {
+    const wrap = btn.closest('div[style*="paddingLeft"]') || btn.closest('.msg-content');
+    let el = btn;
+    while (el && !el.style.paddingLeft) el = el.parentElement;
+    if (el) el.remove();
+    addUserMessage('개인정보 수집·이용에 동의합니다');
+    setTimeout(() => {
+      addBotMessage('감사합니다. 아래에 연락처 정보를 입력해 주세요.', true, 0);
+      setTimeout(() => showContactForm(), 600);
+    }, 300);
+  }
+
+  function onPrivacyDecline(btn) {
+    let el = btn;
+    while (el && !el.style.paddingLeft) el = el.parentElement;
+    if (el) el.remove();
+    addUserMessage('거부');
+    addBotMessage(
+      '동의하지 않으셔도 괜찮습니다.<br><br>' +
+      '직접 전화로 문의하시면 개인정보 제공 없이 상담이 가능합니다.<br><br>' +
+      `📞 <strong>${PHONE}</strong><br><small style="color:#888">평일 09:00 ~ 18:00</small>`,
+      true, 300);
+  }
+
+  function showContactForm() {
+    setTimeout(() => {
+      const formId = 'contactForm_' + Date.now();
+      const wrap = document.createElement('div');
+      wrap.style.paddingLeft = '44px';
+      wrap.innerHTML = `
+        <div style="background:white;border-radius:16px;border-top-left-radius:4px;padding:16px;font-size:14px">
+          <div style="margin-bottom:12px">
+            <div style="font-size:12px;color:#888;margin-bottom:4px">이름</div>
+            <input id="${formId}_name" type="text" placeholder="홍길동"
+              style="width:100%;padding:9px 12px;border:1.5px solid #ddd;border-radius:10px;font-size:14px;font-family:inherit;outline:none">
+          </div>
+          <div style="margin-bottom:12px">
+            <div style="font-size:12px;color:#888;margin-bottom:4px">연락처</div>
+            <input id="${formId}_phone" type="tel" placeholder="010-0000-0000"
+              style="width:100%;padding:9px 12px;border:1.5px solid #ddd;border-radius:10px;font-size:14px;font-family:inherit;outline:none">
+          </div>
+          <div style="margin-bottom:16px">
+            <div style="font-size:12px;color:#888;margin-bottom:6px">연락 가능 시간</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap" id="${formId}_time">
+              <button class="time-btn" data-val="오전(9~12시)" onclick="selectTime(this,'${formId}_time')"
+                style="padding:7px 14px;border:1.5px solid #ddd;border-radius:20px;background:white;font-size:13px;cursor:pointer;font-family:inherit">오전 (9~12시)</button>
+              <button class="time-btn" data-val="오후(12~18시)" onclick="selectTime(this,'${formId}_time')"
+                style="padding:7px 14px;border:1.5px solid #ddd;border-radius:20px;background:white;font-size:13px;cursor:pointer;font-family:inherit">오후 (12~18시)</button>
+              <button class="time-btn" data-val="저녁(18시이후)" onclick="selectTime(this,'${formId}_time')"
+                style="padding:7px 14px;border:1.5px solid #ddd;border-radius:20px;background:white;font-size:13px;cursor:pointer;font-family:inherit">저녁 (18시 이후)</button>
+              <button class="time-btn" data-val="아무때나" onclick="selectTime(this,'${formId}_time')"
+                style="padding:7px 14px;border:1.5px solid #ddd;border-radius:20px;background:white;font-size:13px;cursor:pointer;font-family:inherit">아무때나</button>
+            </div>
+          </div>
+          <button onclick="submitContact('${formId}')"
+            style="width:100%;padding:13px;background:#fee500;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">
+            상담 신청 완료
+          </button>
+          <div style="font-size:11px;color:#aaa;text-align:center;margin-top:8px">
+            입력하신 정보는 상담 연락 목적으로만 사용됩니다.
+          </div>
+        </div>`;
+      chatBody.appendChild(wrap);
+      scrollDown();
+    }, 600);
+  }
+
+  function selectTime(btn, groupId) {
+    document.querySelectorAll(`#${groupId} .time-btn`).forEach(b => {
+      b.style.background = 'white';
+      b.style.borderColor = '#ddd';
+      b.style.color = '#333';
+      b.style.fontWeight = 'normal';
+    });
+    btn.style.background = '#fee500';
+    btn.style.borderColor = '#e6c900';
+    btn.style.fontWeight = '700';
+    btn.dataset.selected = 'true';
+  }
+
+  function submitContact(formId) {
+    const name  = document.getElementById(`${formId}_name`).value.trim();
+    const phone = document.getElementById(`${formId}_phone`).value.trim();
+    const timeBtn = document.querySelector(`#${formId}_time .time-btn[data-selected="true"]`);
+    const time  = timeBtn ? timeBtn.dataset.val : '';
+
+    if (!name)  { alert('이름을 입력해 주세요.'); return; }
+    if (!phone) { alert('연락처를 입력해 주세요.'); return; }
+    if (!time)  { alert('연락 가능 시간을 선택해 주세요.'); return; }
+
+    // Google Sheets 전송
+    fetch('https://script.google.com/macros/s/AKfycbwUipwYn_agmNXgOAsRgZp0BrZPZJKfLUzMy74257R47sLrF3tXvtClqb8m5S0PTgbb/exec', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name:           name,
+        contact:        phone,
+        contactTime:    time,
+        caseType:       answers.caseType       || '',
+        subType:        answers.subType        || '',
+        empType:        answers.empType        || '',
+        tenure:         answers.tenure         || '',
+        compSize:       answers.compSize       || '',
+        negotiation:    answers.negotiation    || '',
+        evidence:       answers.evidence       || '',
+        desiredOutcome: answers.desiredOutcome || '',
+      })
+    }).catch(() => {});
+
+    // 폼 제거 후 사용자 메시지
+    const formWrap = document.getElementById(`${formId}_name`).closest('div[style*="paddingLeft"]') ||
+                     document.getElementById(`${formId}_name`).closest('div');
+    // 상위 wrap 제거
+    let el = document.getElementById(`${formId}_name`);
+    while (el && !el.style.paddingLeft) el = el.parentElement;
+    if (el) el.remove();
+
+    addUserMessage(`${name} / ${phone} / ${time}`);
+
+    // 완료 메시지
+    const serviceLabels = {
+      '1회상담': '1회 상담',
+      '전체의뢰': '사건 전체 대응 의뢰',
+      '정기자문': '정기 자문 계약 검토',
+      '미정': '상담 후 결정',
+    };
+    const serviceNote = answers.serviceType
+      ? `<br>• 희망 서비스: <strong>${serviceLabels[answers.serviceType] || answers.serviceType}</strong>` : '';
+
+    setTimeout(async () => {
+      await addBotMessage(
+        `<strong>${name}</strong>님, 상담 신청이 완료되었습니다! ✅<br><br>` +
+        `접수된 내용${serviceNote}<br>` +
+        `노무사님이 검토 후 <strong>${time}</strong>에 연락드리겠습니다.<br><br>` +
+        `급하신 경우 아래 번호로 직접 연락해 주세요.`, true, 0);
+      setTimeout(() => {
+        const wrap = document.createElement('div');
+        wrap.style.paddingLeft = '44px';
+        wrap.innerHTML = `
+          <div style="background:#fff9c4;border-radius:12px;padding:14px 16px;border:1.5px solid #fee500;font-size:14px">
+            <div style="font-weight:700;margin-bottom:6px">📞 노무법인 하이랩 김포지사</div>
+            <div style="font-size:18px;font-weight:700;color:#3c1e1e;margin:4px 0">${PHONE}</div>
+            <div style="font-size:12px;color:#888">평일 09:00 ~ 18:00</div>
+          </div>`;
+        chatBody.appendChild(wrap);
+        scrollDown();
+      }, 600);
+    }, 300);
+  }
+
+  // ==================== 시작 ====================
+  setTimeout(() => step0_intro(), 400);
+</script>
+</body>
+</html>
