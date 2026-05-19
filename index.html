@@ -751,7 +751,7 @@
       { label: '📋 근로계약서', value: '계약서' },
       { label: '📊 급여명세서·통장내역', value: '급여서류' },
       { label: '❌ 없음', value: '없음' },
-    ], opt => { answers.evidence = opt.value; showResult(); });
+    ], opt => { answers.evidence = opt.value; askConsultQuestion(); });
   }
 
   // ==================== 임금체불 분기 Q4~Q10 ====================
@@ -845,7 +845,7 @@
       { label: '📋 근로계약서', value: '계약서' },
       { label: '🎙️ 녹음 파일', value: '녹음' },
       { label: '❌ 없음', value: '없음' },
-    ], opt => { answers.evidence = opt.value; showResult(); });
+    ], opt => { answers.evidence = opt.value; askConsultQuestion(); });
   }
 
   // ==================== 직장내괴롭힘 분기 Q4~Q10 ====================
@@ -993,7 +993,7 @@
         { label: '📋 업무 지시서·징계 기록', value: '일지' },
         { label: '📱 문자·카카오톡 (회사 기기)', value: '문자' },
         { label: '❌ 특별히 없음', value: '없음' },
-      ], opt => { answers.evidence = opt.value; showResult(); });
+      ], opt => { answers.evidence = opt.value; askConsultQuestion(); });
     } else {
       await addBotMessage(`<strong>Q10. 보유 중인 자료가 있나요?</strong><br><small style="color:#888">본인이 직접 참여한 대화의 녹음은 합법입니다</small>`);
       addOptions([
@@ -1003,7 +1003,7 @@
         { label: '📷 사진·영상 증거', value: '영상' },
         { label: '📓 날짜별 기록 (일지)', value: '일지' },
         { label: '❌ 없음', value: '없음' },
-      ], opt => { answers.evidence = opt.value; showResult(); });
+      ], opt => { answers.evidence = opt.value; askConsultQuestion(); });
     }
   }
 
@@ -1226,7 +1226,7 @@
       { label: '받은 적 있음 (조치 미완)', value: '수검_미완' },
       { label: '❌ 받은 적 없음', value: '없음' },
       { label: '잘 모르겠어요', value: '모름' },
-    ], opt => { answers.laborInspection = opt.value; showResult(); });
+    ], opt => { answers.laborInspection = opt.value; askConsultQuestion(); });
   }
 
   // ==================== 근로계약·취업규칙 분기 Q4 ====================
@@ -1339,22 +1339,33 @@
         { label: '근로조건 원상 복구', value: '원상복구' },
         { label: '법적 처벌 (고소·고발)', value: '처벌' },
         { label: '일단 대응 방향 파악', value: '방향파악' },
-      ], opt => { answers.desiredOutcome = opt.value; showResult(); });
+      ], opt => { answers.desiredOutcome = opt.value; askConsultQuestion(); });
     } else if (answers.subType === '부당전보') {
       addOptions([
         { label: '원직 복직', value: '복직' },
         { label: '금전적 보상·합의', value: '금전' },
         { label: '법적 처벌 (고소·고발)', value: '처벌' },
         { label: '일단 대응 방향 파악', value: '방향파악' },
-      ], opt => { answers.desiredOutcome = opt.value; showResult(); });
+      ], opt => { answers.desiredOutcome = opt.value; askConsultQuestion(); });
     } else {
       addOptions([
         { label: '금전적 보상·합의', value: '금전' },
         { label: '근로조건 시정·원상 복구', value: '원상복구' },
         { label: '법적 처벌 (고소·고발)', value: '처벌' },
         { label: '일단 대응 방향 파악', value: '방향파악' },
-      ], opt => { answers.desiredOutcome = opt.value; showResult(); });
+      ], opt => { answers.desiredOutcome = opt.value; askConsultQuestion(); });
     }
+  }
+
+  // ==================== 상담 질문 자유입력 ====================
+
+  async function askConsultQuestion() {
+    updateProgress(10);
+    await addBotMessage(`<strong>마지막으로, 노무사님께 꼭 여쭤보고 싶은 내용을 간단히 적어주세요.</strong><br><small style="color:#888">예: "권고사직 거부하면 어떻게 되나요?", "체불된 퇴직금 받을 수 있을지 확인하고 싶어요"</small>`);
+    addTextInput('궁금한 점을 자유롭게 적어주세요 (Enter로 제출)', val => {
+      answers.consultQuestion = val;
+      showResult();
+    });
   }
 
   // ==================== 결과 화면 ====================
@@ -1646,6 +1657,7 @@
         laborInspection:   answers.laborInspection   || '',
         negotiation:       answers.negotiation       || '',
         desiredOutcome:    answers.desiredOutcome    || '',
+        consultQuestion:   answers.consultQuestion   || '',
       })
     }).catch(() => {});
 
