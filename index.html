@@ -9,7 +9,7 @@
 
     body {
       font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-      background: #b2c7d9;
+      background: #f0f2f5;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -20,7 +20,7 @@
     .phone-wrap {
       width: 100%;
       max-width: 420px;
-      background: #b2c7d9;
+      background: #f0f2f5;
       border-radius: 30px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
       overflow: hidden;
@@ -29,9 +29,8 @@
       flex-direction: column;
     }
 
-    /* 카카오톡 채널 헤더 */
     .chat-header {
-      background: #3c1e1e;
+      background: #1a2e4a;
       padding: 14px 16px;
       display: flex;
       align-items: center;
@@ -47,7 +46,7 @@
       width: 38px;
       height: 38px;
       border-radius: 10px;
-      background: #fee500;
+      background: rgba(255,255,255,0.15);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -62,7 +61,7 @@
     /* 채팅 영역 */
     .chat-body {
       flex: 1;
-      background: #b2c7d9;
+      background: #f0f2f5;
       padding: 16px 12px;
       overflow-y: auto;
       display: flex;
@@ -96,7 +95,7 @@
       width: 36px;
       height: 36px;
       border-radius: 10px;
-      background: #fee500;
+      background: #1a2e4a;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -121,9 +120,9 @@
       color: #222;
     }
     .bubble.user {
-      background: #fee500;
+      background: #1a2e4a;
       border-top-right-radius: 4px;
-      color: #222;
+      color: white;
       text-align: right;
     }
 
@@ -154,8 +153,8 @@
       transition: all 0.15s;
       font-family: inherit;
     }
-    .opt-btn:hover { background: #fff9c4; border-color: #fee500; }
-    .opt-btn.selected { background: #fee500; border-color: #e6c900; font-weight: 600; }
+    .opt-btn:hover { background: #eef1f6; border-color: #1a2e4a; }
+    .opt-btn.selected { background: #1a2e4a; border-color: #1a2e4a; color: white; font-weight: 600; }
     .opt-btn:disabled { opacity: 0.5; cursor: default; }
 
     /* 진행 바 */
@@ -166,7 +165,7 @@
     }
     .progress-fill {
       height: 100%;
-      background: #fee500;
+      background: #4a7fc1;
       transition: width 0.4s ease;
       border-radius: 2px;
     }
@@ -182,8 +181,8 @@
     }
     .result-card .badge {
       display: inline-block;
-      background: #fee500;
-      color: #333;
+      background: #e8edf4;
+      color: #1a2e4a;
       font-size: 11px;
       font-weight: 700;
       padding: 3px 10px;
@@ -256,15 +255,15 @@
       transition: all 0.15s;
     }
     .cta-btn.primary {
-      background: #fee500;
-      color: #3c1e1e;
-    }
-    .cta-btn.primary:hover { background: #f5dc00; }
-    .cta-btn.secondary {
-      background: #3c1e1e;
+      background: #1a2e4a;
       color: white;
     }
-    .cta-btn.secondary:hover { background: #4e2828; }
+    .cta-btn.primary:hover { background: #243d5e; }
+    .cta-btn.secondary {
+      background: #2c3e50;
+      color: white;
+    }
+    .cta-btn.secondary:hover { background: #1a2e4a; }
     .cta-btn.outline {
       background: white;
       color: #555;
@@ -289,11 +288,11 @@
       height: 60px;
       background: white;
     }
-    .text-input-wrap textarea:focus { outline: none; border-color: #fee500; }
+    .text-input-wrap textarea:focus { outline: none; border-color: #1a2e4a; }
     .send-btn {
       width: 48px;
       height: 60px;
-      background: #fee500;
+      background: #1a2e4a;
       border: none;
       border-radius: 20px;
       font-size: 18px;
@@ -427,7 +426,7 @@
           <div style="font-size:13px;color:#888;margin-bottom:20px;line-height:1.6">지금까지 입력한 내용이 모두 초기화됩니다.</div>
           <div style="display:flex;gap:8px">
             <button onclick="this.closest('div[style*=fixed]').remove()" style="flex:1;padding:12px;background:white;border:1.5px solid #ddd;border-radius:10px;font-size:14px;color:#555;cursor:pointer;font-family:inherit">취소</button>
-            <button onclick="location.reload()" style="flex:1;padding:12px;background:#fee500;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">처음으로</button>
+            <button onclick="location.reload()" style="flex:1;padding:12px;background:#1a2e4a;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">처음으로</button>
           </div>
         </div>`;
       document.body.appendChild(overlay);
@@ -493,7 +492,7 @@
           row.innerHTML = `
             ${withAvatar ? `<div class="bot-avatar">⚖️</div>` : `<div style="width:36px;flex-shrink:0"></div>`}
             <div class="msg-content">
-              ${withAvatar ? `<div class="msg-name">하이랩 상담봇</div>` : ''}
+              ${withAvatar ? `<div class="msg-name">노무법인 하이랩</div>` : ''}
               <div class="bubble bot">${html}</div>
             </div>
             <div class="msg-time">${nowTime()}</div>`;
@@ -581,7 +580,7 @@
   // ==================== 공통 Q1~Q3 ====================
 
   async function step0_intro() {
-    await addBotMessage(`안녕하세요! 👋<br>노무법인 하이랩 김포지사 <strong>사전점검 상담 채널</strong>입니다.<br><br>몇 가지 질문에 답해주시면 노무사님이 내용을 검토한 후 직접 연락드립니다.<br><br>⏱ 소요시간: 약 3~5분<br>🔒 마지막 단계에서 개인정보 수집 동의 후 연락처를 입력합니다.`);
+    await addBotMessage(`안녕하세요.<br>노무법인 하이랩 김포지사입니다.<br><br>몇 가지 질문을 통해 <strong>유료 상담이 필요한 사안인지 사전에 판단</strong>해 드립니다. 노무사님이 내용을 검토한 후 직접 연락드립니다.<br><br>⏱ 소요시간: 약 3~5분<br>🔒 마지막 단계에서 개인정보 수집 동의 후 연락처를 입력합니다.`);
     setTimeout(() => {
       const wrap = document.createElement('div');
       wrap.style.paddingLeft = '44px';
@@ -1394,7 +1393,7 @@
     resultRow.innerHTML = `
       <div class="bot-avatar">⚖️</div>
       <div class="msg-content">
-        <div class="msg-name">하이랩 상담봇</div>
+        <div class="msg-name">노무법인 하이랩</div>
         <div class="result-card">${summaryHtml}</div>
       </div>
       <div class="msg-time">${nowTime()}</div>`;
@@ -1496,7 +1495,7 @@
           </div>
           <div style="display:flex;gap:8px">
             <button onclick="onPrivacyAgree(this)"
-              style="flex:1;padding:12px;background:#fee500;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">
+              style="flex:1;padding:12px;background:#1a2e4a;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">
               ✅ 동의하고 계속하기
             </button>
             <button onclick="onPrivacyDecline(this)"
@@ -1565,7 +1564,7 @@
             </div>
           </div>
           <button onclick="submitContact('${formId}')"
-            style="width:100%;padding:13px;background:#fee500;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">
+            style="width:100%;padding:13px;background:#1a2e4a;color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">
             사전점검상담 접수 완료
           </button>
           <div style="font-size:11px;color:#aaa;text-align:center;margin-top:8px">
@@ -1584,8 +1583,9 @@
       b.style.color = '#333';
       b.style.fontWeight = 'normal';
     });
-    btn.style.background = '#fee500';
-    btn.style.borderColor = '#e6c900';
+    btn.style.background = '#1a2e4a';
+    btn.style.color = 'white';
+    btn.style.borderColor = '#1a2e4a';
     btn.style.fontWeight = '700';
     btn.dataset.selected = 'true';
   }
@@ -1679,9 +1679,9 @@
         const wrap = document.createElement('div');
         wrap.style.paddingLeft = '44px';
         wrap.innerHTML = `
-          <div style="background:#fff9c4;border-radius:12px;padding:14px 16px;border:1.5px solid #fee500;font-size:14px">
+          <div style="background:#e8edf4;border-radius:12px;padding:14px 16px;border:1.5px solid #1a2e4a;font-size:14px">
             <div style="font-weight:700;margin-bottom:6px">📞 노무법인 하이랩 김포지사</div>
-            <div style="font-size:18px;font-weight:700;color:#3c1e1e;margin:4px 0">${PHONE}</div>
+            <div style="font-size:18px;font-weight:700;color:#1a2e4a;margin:4px 0">${PHONE}</div>
             <div style="font-size:12px;color:#888">평일 09:00 ~ 18:00</div>
           </div>`;
         chatBody.appendChild(wrap);
